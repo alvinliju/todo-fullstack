@@ -138,7 +138,7 @@ The API returns appropriate HTTP status codes:
 - [X] Add input validation using Joi or express-validator
 - [X] Implement rate limiting
 - [X] Add request logging
-- [ ] Implement password reset functionality
+- [X] Implement password reset functionality
 - [ ] Add email verification
 - [ ] Implement refresh tokens
 - [ ] Add todo categories/labels

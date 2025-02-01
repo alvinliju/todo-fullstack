@@ -1,8 +1,12 @@
+const User = require("../models/User");
 const { registerUserHelper, loginUserHelper } = require("../utils/authHelpers");
-const {z} = require('zod')
-
-//zod object to validate login credentials
-
+const { z } = require('zod');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+const emailjs = require('emailjs');
+const axios = require('axios')
+require("dotenv").config();
+const {Resent, Resend} = require('resend')
 
 
 const registerUser = async (req, res) => {
@@ -63,5 +67,86 @@ const loginUser = async (req, res) => {
   }
 };
 
+const requestPasswordReset = async(req, res)=>{
+  try{
 
-module.exports = { registerUser, loginUser };
+    const { email } = req.body;
+    //finding user form db
+    const user = await User.findOne({email})
+    console.log(user)
+
+    if(!user){
+      return res.status(404).json({message: "Unexpected error occured"})
+    }
+
+    console.log("before signing tokens")
+    const secret = process.env.SECRET + user.password;
+    const token = jwt.sign({ id: user._id, email: user.email }, secret, { expiresIn: '1h' });
+
+    console.log("after signing tokens")
+    //crafting reset link to send to user via mail
+    const resetURL = `http://localhost:3000/auth/resetpassword?id=${user._id}&token=${token}`
+
+    console.log("creafted the reset url")
+    
+    const resend = new Resend(process.env.RESENT_API)
+
+    const mail = await resend.emails.send({
+        from: 'tofusupoort@resend.dev',
+        to: 'alvinliju44@gmail.com',
+        subject: 'Hello World',
+        html: `<p>Your reset link is:${resetURL} </strong>!</p>`
+    })
+
+    if(!mail) res.status(500).json({message:"somethfdk fuck off"})
+
+      res.status(200).json({message:"Email send"})
+    
+   
+  }catch(err){
+    res.status(500).json({message: "something went wrong"})
+  }
+}
+
+//reset password
+const resetPassword = async (req,res) => {
+  try{
+    console.log("here")
+    const {id, token} = req.query
+    const {password} = req.body
+
+    console.log("form reset pass")
+    console.log(id, token, password)
+    const user = await User.findById({_id:id})
+    console.log(user)
+
+    if(!user){
+      return res.status(400).json({ message: "User not exists!" });
+    }
+
+    const secret = process.env.SECRET + user.password;
+    const verify = jwt.verify(token, secret);
+    if(!verify) res.status(404).json({message:"unauthorized access"})
+    const hashedPassword = await bcrypt.hash(password, 10);
+    await User.updateOne(
+      {
+      _id: id
+    },
+    {
+      $set: {
+        password: hashedPassword
+      }
+    }
+  )
+
+  res.status(200).json({message:"Password has been reset"})
+    
+  }catch(err){
+    res.status(500).json({message: "something went wrong"})
+  }
+
+}
+
+
+
+module.exports = { registerUser, loginUser, resetPassword, requestPasswordReset };
