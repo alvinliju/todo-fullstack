@@ -47,7 +47,7 @@ userSchema.methods.isValidPassword = async function (password) {
     return await bcrypt.compare(password, this.password);
   } catch (error) {
     throw new Error("Password comparison failed");
-  }
+  } 
 };
 
 userSchema.methods.generateAuthToken = function () {

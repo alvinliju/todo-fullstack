@@ -1,5 +1,6 @@
 const Todo = require("../models/Todo");
 
+
 const getAllTodos = async (req, res) => {
   try {
     const todos = await Todo.find({ userId: req.userId });
@@ -44,6 +45,14 @@ const updateTodo = async (req, res) => {
     console.log(err);
   }
 };
+
+const updateTodoIsDone = async(req,res)=>{
+  try{
+  
+  }catch(err){
+    res.status(500).json({error: err.message})
+  }
+}
 
 const deleteTodo = async (req, res) => {
   try {
