@@ -136,8 +136,7 @@ The API returns appropriate HTTP status codes:
 
 ### Backend Enhancements
 - [X] Add input validation using Joi or express-validator
-- [ ] Implementing reddis cache
-- [ ] Implement rate limiting
+- [X] Implement rate limiting
 - [X] Add request logging
 - [ ] Implement password reset functionality
 - [ ] Add email verification
