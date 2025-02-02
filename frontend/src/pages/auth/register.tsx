@@ -8,6 +8,7 @@ export function RegisterPage() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("");
+  const [regStatus, setRegStatus] = useState("")
   const [name, setName] = useState("")
   const navigate = useNavigate()
 
@@ -19,13 +20,13 @@ export function RegisterPage() {
         const response = await axios.post('/auth/register', registerData)
 
         if(response.status == 201){
-            alert('REgistration successful')
+            setRegStatus("Registration Success, you'll be redirected")
             navigate('/login')
         }
     }catch(err){
         if(err.response && err.response.data && err.response.data.error){
             console.log(err)
-            setError(err.response.data.eroor.join(', '))
+            setError(err.response.data.error.join(', '))
         }else{
             setError('Something went wrong')
         }
@@ -38,6 +39,7 @@ export function RegisterPage() {
     <main className="container px-4 py-16 mx-auto max-w-md">
       <div className="text-center mb-8">
       {error && <p style={{ color: 'red' }}>{error}</p>}
+      {regStatus &&  <p style={{ color: 'green' }}>{regStatus}</p>}
         <h1 className="text-2xl font-bold">Create an account</h1>
         <p className="text-gray-400 mt-2">Start organizing your tasks with tofu</p>
       </div>

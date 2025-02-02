@@ -12,6 +12,10 @@ const todoSchema = new mongoose.Schema({
     type: String,
     default: uuidv4,
   },
+  description:{
+    type: String,
+    required:false
+  },
   completed: {
     type: Boolean,
     default: false,

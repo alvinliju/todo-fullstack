@@ -25,12 +25,13 @@ const createNewTodo = async (req, res) => {
 
 const updateTodo = async (req, res) => {
   try {
-    const { title, completed } = req.body;
+    const { title, completed, description } = req.body;
     const todo = await Todo.findByIdAndUpdate(
       { _id: req.params.id, userId: req.userId },
       {
         $set: {
           title: title,
+          description:description,
           completed: completed,
         },
       },
