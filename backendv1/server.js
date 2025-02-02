@@ -1,8 +1,8 @@
 const connectDB = require("./src/db/index");
 const app = require("./src/index.js");
-require('dotenv').config();
+require("dotenv").config();
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 
 // Connect to database
 connectDB();
@@ -12,12 +12,9 @@ app.get("/health", (req, res) => {
   res.status(200).json({ status: "OK" });
 });
 
-// For local development
-if (process.env.NODE_ENV !== "production") {
-  app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-  });
-}
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
 
 // Export for Render
 module.exports = app;
