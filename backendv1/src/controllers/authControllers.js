@@ -92,7 +92,7 @@ const requestPasswordReset = async (req, res) => {
     const mail = await resend.emails.send({
       from: "tofusupoort@resend.dev",
       to: "alvinliju44@gmail.com",
-      subject: "Hello World",
+      subject: "Reset Link | Tofu Todo",
       html: `<p>Your reset link is:${resetURL} </strong>!</p>`,
     });
 
