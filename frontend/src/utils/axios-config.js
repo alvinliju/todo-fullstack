@@ -1,4 +1,3 @@
-// In a separate config file (e.g., axios-config.js)
 import axios from 'axios';
 
 const instance = axios.create({
