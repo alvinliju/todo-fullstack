@@ -1,17 +1,23 @@
 const connectDB = require("./src/db/index");
 const app = require("./src/index.js");
+require('dotenv').config();
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
-const startServer = async () => {
-  try {
-    await connectDB();
-    app.listen(PORT, () => {
-      console.log(`Server started on port ${PORT}`);
-    });
-  } catch (err) {
-    console.log("Failed to start server", err);
-  }
-};
+// Connect to database
+connectDB();
 
-startServer();
+// Health check route directly in server.js
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "OK" });
+});
+
+// For local development
+if (process.env.NODE_ENV !== "production") {
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}
+
+// Export for Render
+module.exports = app;
