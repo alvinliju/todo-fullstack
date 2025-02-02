@@ -20,10 +20,12 @@ const app = express();
 //middlewares
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || "*",
+    origin: true,
     credentials: true,
   }),
 );
+
+
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(morgan("combined", { stream: accessLogStream })); // Log to file

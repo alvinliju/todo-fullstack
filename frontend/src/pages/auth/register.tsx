@@ -1,20 +1,43 @@
 import { useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import React from "react"
+import axios from '../../utils/axios-config';
+
 
 export function RegisterPage() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [error, setError] = useState("");
   const [name, setName] = useState("")
+  const navigate = useNavigate()
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // Handle registration logic here
+    try{
+        const registerData = JSON.stringify({name:name, email:email, password:password})
+ 
+        const response = await axios.post('/auth/register', registerData)
+
+        if(response.status == 201){
+            alert('REgistration successful')
+            navigate('/login')
+        }
+    }catch(err){
+        if(err.response && err.response.data && err.response.data.error){
+            console.log(err)
+            setError(err.response.data.eroor.join(', '))
+        }else{
+            setError('Something went wrong')
+        }
+    }
   }
+
+
 
   return (
     <main className="container px-4 py-16 mx-auto max-w-md">
       <div className="text-center mb-8">
+      {error && <p style={{ color: 'red' }}>{error}</p>}
         <h1 className="text-2xl font-bold">Create an account</h1>
         <p className="text-gray-400 mt-2">Start organizing your tasks with tofu</p>
       </div>
