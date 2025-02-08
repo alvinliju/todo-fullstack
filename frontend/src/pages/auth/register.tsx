@@ -1,37 +1,11 @@
-import { useState } from "react"
+
 import { Link, useNavigate } from "react-router-dom"
 import React from "react"
-import axios from '../../utils/axios-config';
+import { useRegister } from "../../hooks/useRegister"
 
 
 export function RegisterPage() {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [error, setError] = useState("");
-  const [regStatus, setRegStatus] = useState("")
-  const [name, setName] = useState("")
-  const navigate = useNavigate()
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    try{
-        const registerData = JSON.stringify({name:name, email:email, password:password})
- 
-        const response = await axios.post('/auth/register', registerData)
-
-        if(response.status == 201){
-            setRegStatus("Registration Success, you'll be redirected")
-            navigate('/login')
-        }
-    }catch(err){
-        if(err.response && err.response.data && err.response.data.error){
-            console.log(err)
-            setError(err.response.data.error.join(', '))
-        }else{
-            setError('Something went wrong')
-        }
-    }
-  }
+ const {email, setEmail, password, setPassword, userName, setUserName, error, regStatus,handleSubmit} = useRegister()
 
 
 
@@ -52,8 +26,8 @@ export function RegisterPage() {
           <input
             id="name"
             type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            value={userName}
+            onChange={(e) => setUserName(e.target.value)}
             className="w-full px-3 py-2 bg-gray-900 border border-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
             required
           />

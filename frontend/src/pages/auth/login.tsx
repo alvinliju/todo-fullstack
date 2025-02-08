@@ -2,28 +2,12 @@ import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import React from "react"
 import axios from "../../utils/axios-config"
+import { useLogin } from "../../hooks/useLogin"
 
 
 export function LoginPage() {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [error, setError] = useState('');
-  const navigate = useNavigate();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    try{
-        const loginData = JSON.stringify({ email:email, password:password})
-        const response = await axios.post('/auth/login', loginData)
-
-        if(response.data.token){
-            localStorage.setItem('token', response.data.token)
-            navigate('/todos')
-        }
-    }catch(err){
-        setError(err.response?.data?.message || 'Login failed. Please try again.');
-    }
-  }
+  const {email, setEmail, password, setPassword, error, handleSubmit} = useLogin()
 
   return (
     <main className="container px-4 py-16 mx-auto max-w-md">

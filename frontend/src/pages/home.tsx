@@ -1,8 +1,11 @@
 import { ArrowRight } from "lucide-react"
 import { Link } from "react-router-dom"
 import React from "react"
+import { useRecoilValue } from "recoil"
+import { authState } from "../contexts/AuthContext"
 
 export function HomePage() {
+  const isAuthenticated = useRecoilValue(authState)
   return (
     <div className="min-h-[calc(100vh-4rem)] relative overflow-hidden">
       {/* Background gradient */}
@@ -42,7 +45,8 @@ export function HomePage() {
           {/* CTA Section */}
           <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-up">
             <Link
-              to="/register"
+            
+              to={isAuthenticated ? "/todos" :"/register"}
               className="group w-full sm:w-auto inline-flex items-center justify-center px-8 py-3 font-medium bg-white text-gray-900 hover:bg-gray-100 rounded-lg transition-colors duration-200"
             >
               Get Started
